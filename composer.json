@@ -1,12 +1,21 @@
 {
 	"name": "zeek/wp-sentry",
 	"type": "library",
-	"license": "proprietary",
 	"description": "A WordPress library to report PHP and JavaScript errors to Sentry",
+	"license": "proprietary",
+	"authors": [
+		{
+			"name": "Aaron Holbrook",
+			"email": "aaron@zeek.com"
+		}
+	],
 	"autoload": {
 		"psr-4": {
 			"Zeek\\WpSentry\\": "src/"
-		}
+		},
+		"files": [
+			"src\\helpers.php"
+		]
 	},
 	"require": {
 		"php": ">=7.4",
