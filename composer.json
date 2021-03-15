@@ -1,0 +1,15 @@
+{
+	"name": "zeek/wp-sentry",
+	"type": "library",
+	"license": "proprietary",
+	"description": "A WordPress library to report PHP and JavaScript errors to Sentry",
+	"autoload": {
+		"psr-4": {
+			"Zeek\\WpSentry\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=7.4",
+		"sentry/sdk": "^3.1"
+	}
+}
