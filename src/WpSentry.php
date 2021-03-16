@@ -2,6 +2,7 @@
 
 namespace Zeek\WpSentry;
 
+use Sentry;
 use Sentry\ClientBuilder;
 use Sentry\Event;
 use Sentry\SentrySdk;
@@ -26,6 +27,10 @@ class WpSentry extends Singleton {
 
 	protected function __construct() {
 		$this->initSentryClient();
+	}
+
+	public function captureException( $exception ) {
+		Sentry\captureException( $exception );
 	}
 
 	private function get_dsn() : ?string {
@@ -60,7 +65,7 @@ class WpSentry extends Singleton {
 		];
 
 		$options['before_send'] = function ( Event $event ) : ?Event {
-			$excludeEvents = array_merge( $this->coreExclusions, get_env_value( 'SENTRY_EXCLUDE_EVENTS' ) ?? []);
+			$excludeEvents = array_merge( $this->coreExclusions, get_env_value( 'SENTRY_EXCLUDE_EVENTS' ) ?? [] );
 
 			// Errors always get reported
 			if ( (string) $event->getLevel() === 'error' ) {
