@@ -18,8 +18,8 @@
 		]
 	},
 	"require": {
-		"php": ">=7.3",
+		"php": ">=7.2",
 		"sentry/sdk": "^3.1",
-		"zeek/modernity": "^0.2"
+		"zeek/modernity": "^0.2.1"
 	}
 }
