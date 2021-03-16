@@ -26,6 +26,12 @@ class WpSentry extends Singleton {
 	];
 
 	protected function __construct() {
+		$this->dsn = $this->get_dsn();
+
+		if ( empty( $this->dsn ) ) {
+			return;
+		}
+
 		$this->initSentryClient();
 	}
 
@@ -40,24 +46,26 @@ class WpSentry extends Singleton {
 			$this->sentryDsn = get_env_value( 'SENTRY_URL' );
 		}
 
-		if ( empty( $this->sentryDsn ) ) {
-			$this->sentryDsn = E_ALL & ~E_NOTICE & ~E_WARNING;
+		return $this->sentryDsn;
+	}
+
+	private function errorTypes() {
+		$errorTypes = get_env_value( 'SENTRY_ERROR_TYPES' );
+
+		if ( empty( $errorTypes ) ) {
+			$errorTypes = E_ALL & ~E_NOTICE & ~E_WARNING;
 		}
 
-		return $this->sentryDsn;
+		return $errorTypes;
 	}
 
 	private function get_default_options() : array {
 		$options = [
-			'dsn'         => $this->get_dsn(),
+			'dsn'         => $this->sentryDsn,
 			'prefixes'    => [ ABSPATH ],
 			'environment' => get_env_value( 'ENVIRONMENT' ),
+			'error_types' => $this->errorTypes()
 		];
-
-		$sentryErrorLevel = get_env_value( 'SENTRY_ERROR_LEVEL' );
-		if ( ! empty( $sentryErrorLevel ) ) {
-			$options['error_types'] = $sentryErrorLevel;
-		}
 
 		$options['in_app_exclude'] = [
 			ABSPATH . 'wp-admin',
