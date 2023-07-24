@@ -75,9 +75,51 @@ class WpSentry extends Singleton {
 		$options['before_send'] = function ( Event $event ) : ?Event {
 			$excludeEvents = array_merge( $this->coreExclusions, get_env_value( 'SENTRY_EXCLUDE_EVENTS' ) ?? [] );
 
-			// Errors always get reported
-			if ( (string) $event->getLevel() === 'error' ) {
+			/*
+			 *   Errors always get reported
+			 *   Fatal errors always get reported
+			 *   Everything else is configurable
+			 *   SENTRY_REPORTED_LEVELS should be an array of Sentry\Severity constants:
+			 *   [
+			 *       'debug',
+			 *       'info',
+			 *       'warning',
+			 *       'error',
+			 *       'fatal',
+			 *   ]
+			 */
+
+			$reportedLevels = get_env_value( 'SENTRY_REPORTED_LEVELS' ) ??
+            [
+                Sentry\Severity::ERROR,
+                Sentry\Severity::FATAL,
+            ];
+
+			if ( in_array( (string) $event->getLevel(), $reportedLevels) ) {
 				return $event;
+			}
+
+			/*
+			 * SENTRY_EXCLUDE_PATHS should be an array of paths to exclude from reporting. Paths start from the root of the site.
+			 * Always include trailing and ending slashes
+			 * Example:
+			 * [
+			 *    '/wp-content/plugins/',
+			 *    '/wp-content/plugins/akismet/',
+			 * ]
+			 */
+
+			$excludedPaths = get_env_value( 'SENTRY_EXCLUDE_PATHS' ) ?? [];
+
+			foreach ($excludedPaths as $excludedPath) {
+				foreach(  $event->getExceptions() as $exception ) {
+					foreach($exception->getStacktrace()->getFrames() as $frame) {
+						$absoluteFilePath = $frame->getFile();
+						if (str_starts_with($absoluteFilePath, $excludedPath)) {
+							return null;
+						}
+					}
+				}
 			}
 
 			// perform filtering here
