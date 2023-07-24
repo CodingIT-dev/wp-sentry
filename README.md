@@ -1,6 +1,6 @@
-# [WordPress Sentry](https://wordpress.org/plugins/wp-sentry-integration/) (wp-sentry)
+# WordPress Sentry (wp-sentry)
 
-A (unofficial) [WordPress plugin](https://wordpress.org/plugins/wp-sentry-integration/) to report PHP and JavaScript errors to [Sentry](https://sentry.io).
+A (unofficial) WordPress plugin to report PHP and JavaScript errors to [Sentry](https://sentry.io).
 
 
 ## What?
@@ -345,16 +345,6 @@ You can remedy this by loading WordPress Sentry as a must-use plugin by creating
 ```php
 <?php
 
-/**
- * Plugin Name: WordPress Sentry
- * Plugin URI: https://github.com/stayallive/wp-sentry
- * Description: A (unofficial) WordPress plugin to report PHP and JavaScript errors to Sentry.
- * Version: must-use-proxy
- * Author: Alex Bouma
- * Author URI: https://alex.bouma.dev
- * License: MIT
- */
-
 $wp_sentry = __DIR__ . '/../plugins/wp-sentry-integration/wp-sentry.php';
 
 if ( ! file_exists( $wp_sentry ) ) {
@@ -388,12 +378,6 @@ add_action( 'wp_enqueue_scripts', function () {
 When the `wp_sentry_hook` function returns `false` the initialization of the Sentry Brower SDK will be stopped. Any other return value will be ignored.
 
 To modify the options you can modify the object passed as the first argument of the `wp_sentry_hook`, this object will later be passed to `Sentry.init` to initialize the Browser SDK.
-
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within WordPress Sentry (wp-sentry), please send an e-mail to Alex Bouma at `alex+security@bouma.me`. All security vulnerabilities will be swiftly addressed.
-
 
 ## License
 
