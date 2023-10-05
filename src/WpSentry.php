@@ -18,6 +18,8 @@ class WpSentry extends Singleton {
 	private $client;
 	private $sentryDsn;
 
+	private $dsn;
+
 	private $coreExclusions = [
 		'Parameter 1 to wp_default_scripts() expected to be a reference, value given',
 		'Parameter 1 to wp_default_styles() expected to be a reference, value given',
