@@ -38,6 +38,7 @@ class WpSentry extends Singleton {
 	}
 
 	public function captureException( $exception ) {
+        $test = 1;
 		Sentry\captureException( $exception );
 	}
 
@@ -97,10 +98,6 @@ class WpSentry extends Singleton {
                 Sentry\Severity::FATAL,
             ];
 
-			if ( in_array( (string) $event->getLevel(), $reportedLevels) ) {
-				return $event;
-			}
-
 			/*
 			 * SENTRY_EXCLUDE_PATHS should be an array of paths to exclude from reporting. Paths start from the root of the site.
 			 * Always include trailing and ending slashes
@@ -133,7 +130,10 @@ class WpSentry extends Singleton {
 				}
 			}
 
-			return $event;
+            // If the event is not in the reported levels, return null
+            if ( in_array( (string) $event->getLevel(), $reportedLevels) ) {
+                return $event;
+            }
 		};
 
 		return $options;
