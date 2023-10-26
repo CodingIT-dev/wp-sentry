@@ -134,6 +134,8 @@ class WpSentry extends Singleton {
             if ( in_array( (string) $event->getLevel(), $reportedLevels) ) {
                 return $event;
             }
+
+            return null;
 		};
 
 		return $options;
